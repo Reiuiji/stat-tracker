@@ -17,7 +17,6 @@ type config struct {
 	TwitchClientSecret string
 	TwitchAccessToken  string
 	bind               string
-	allowedOrigins     string
 }
 
 func parseFlags() (config, error) {
@@ -27,7 +26,6 @@ func parseFlags() (config, error) {
 	flag.StringVar(&c.TwitchClientSecret, "twitch-client-secret", "", "The secret key for twitch api")
 	flag.StringVar(&c.TwitchAccessToken, "twitch-client-token", "", "Client Token for twitch api")
 	flag.StringVar(&c.bind, "bind", "0.0.0.0:8080", "The host:port to bind to.")
-	flag.StringVar(&c.allowedOrigins, "allowed-origins", "", "The set of Origins that should be returned for requests.")
 	flag.Parse()
 
 	if c.TwitchGenToken == true {

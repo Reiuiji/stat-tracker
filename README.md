@@ -14,5 +14,6 @@ Run the stat-tracker with the client token to properly link with the api.
 `go run stat-tracker.go --twitch-client-id=[clientID] --twitch-client-token=[clientToken]`
 
 Once the stat-tracker is up. You can access the data through the HTTP interface. Below is an example of how to input the data. The result data will output in json format that can easily be process in a web app.
-Go to http://0.0.0.0:8080/twitch?streams=relaxbeats,twitchplayspokemon
+
+http://0.0.0.0:8080/twitch?streams=relaxbeats,twitchplayspokemon
 

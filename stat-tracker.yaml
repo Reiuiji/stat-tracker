@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stat-tracker
+  labels:
+    app: stat-tracker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: stat-tracker
+  template:
+    metadata:
+      labels:
+        app: stat-tracker
+    spec:
+      containers:
+        - name: stat-tracker
+          image: poni/stat-tracker:v1
+          ports:
+            - containerPort: 8080
+          args:
+            - --bind=0.0.0.0:8080
+            - --twitch-client-id=$(TWITCH_CLIENT_ID)
+            - --twitch-client-token=$(TWITCH_CLIENT_TOKEN)
+          env:
+          - name: TWITCH_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: env-secrets
+                key: TWITCH_CLIENT_ID
+          - name: TWITCH_CLIENT_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: env-secrets
+                key: TWITCH_CLIENT_TOKEN
+          resources:
+            requests:
+              cpu: "1.5"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stat-tracker
+spec:
+  selector:
+    app: stat-tracker
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      name: http
