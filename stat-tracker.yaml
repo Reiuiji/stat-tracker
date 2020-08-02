@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: stat-tracker
-          image: reiuiji/stat-tracker:v1
+          image: reiuiji/stat-tracker:1.0.1
           ports:
             - containerPort: 8080
           args:
