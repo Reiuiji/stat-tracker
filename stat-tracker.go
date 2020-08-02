@@ -16,7 +16,7 @@ import (
 const (
 	Major uint = 1
 	Minor uint = 0
-	Patch uint = 0
+	Patch uint = 1
 )
 
 var version = fmt.Sprintf("%d.%d.%d", Major, Minor, Patch)
