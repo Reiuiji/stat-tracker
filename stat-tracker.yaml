@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: stat-tracker
-          image: poni/stat-tracker:v1
+          image: reiuiji/stat-tracker:v1
           ports:
             - containerPort: 8080
           args:
@@ -27,12 +27,12 @@ spec:
           - name: TWITCH_CLIENT_ID
             valueFrom:
               secretKeyRef:
-                name: env-secrets
+                name: twitch-secrets
                 key: TWITCH_CLIENT_ID
           - name: TWITCH_CLIENT_TOKEN
             valueFrom:
               secretKeyRef:
-                name: env-secrets
+                name: twitch-secrets
                 key: TWITCH_CLIENT_TOKEN
           resources:
             requests:
