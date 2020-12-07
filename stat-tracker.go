@@ -40,10 +40,10 @@ func parseFlags() (config, error) {
 
 	if c.TwitchGenToken == true {
 		if c.TwitchClientID == "" {
-			return c, fmt.Errorf("you must specify --twitch-client-id\n")
+			return c, fmt.Errorf("you must specify --twitch-client-id")
 		}
 		if c.TwitchClientSecret == "" {
-			return c, fmt.Errorf("you must specify --twitch-client-secret\n")
+			return c, fmt.Errorf("you must specify --twitch-client-secret")
 		}
 	}
 	if c.TwitchClientID == "" {
@@ -64,8 +64,8 @@ func main() {
 	}
 	http.HandleFunc("/twitch", c.twitch)
 	http.HandleFunc("/healthz", healthHandler)
-	log.Printf("Starting up Stat-Tracker [Version %s, Build: %s %s/%s]\n", version, runtime.Version(), runtime.GOOS, runtime.GOARCH)
-	log.Printf("Serving on %s\n", c.bind)
+	log.Printf("Starting up Stat-Tracker [Version %s, Build: %s %s/%s]", version, runtime.Version(), runtime.GOOS, runtime.GOARCH)
+	log.Printf("Serving on %s", c.bind)
 	log.Fatal(http.ListenAndServe(c.bind, nil))
 }
 
@@ -85,24 +85,24 @@ func (cnf config) twitch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("Twitch: Requesting stats for streams %s)n", streams)
+	log.Printf("Twitch: Requesting stats for streams %s)", streams)
 
 	w.Header().Set("Content-Type", "application/json")
 	streamInfo, err := getTwitchInfo(cnf, streams)
 
 	if err != nil {
-		log.Printf("Twitch: Failed to grab stream info (%v)\n", err.Error())
+		log.Printf("Twitch: Failed to grab stream info (%v)", err.Error())
 		return
 	}
 	if streamInfo == nil {
-		log.Printf("Twitch: No stream found (%s)\n", streams)
+		log.Printf("Twitch: No stream found (%s)", streams)
 		http.Error(w, "{}", http.StatusBadRequest)
 		return
 	}
 
 	j, err := json.Marshal(streamInfo)
 	if err != nil {
-		log.Printf("Twitch: Failed to marshal json: %v.\n", err)
+		log.Printf("Twitch: Failed to marshal json: %v.", err)
 	}
 	_, _ = w.Write(j)
 
@@ -143,17 +143,17 @@ func genAccessToken(AppConfig config) (status bool) {
 	}
 
 	if client == nil {
-		log.Printf("GenAccessToken: Client setup is nil (bad data?)\n")
+		log.Printf("GenAccessToken: Client setup is nil (bad data?)")
 		return
 	}
 
 	resp, err := client.GetAppAccessToken()
 	if err != nil {
-		log.Printf("GenAccessToken: Twitch API Error: %+v\n", err.Error())
+		log.Printf("GenAccessToken: Twitch API Error: %+v", err.Error())
 		return false
 	}
 
-	log.Printf("Generated Client Token: %+v\n", resp.Data.AccessToken)
-	log.Printf("Token will expire: %+v\n", resp.Data.ExpiresIn)
+	log.Printf("Generated Client Token: %+v", resp.Data.AccessToken)
+	log.Printf("Token will expire: %+v", resp.Data.ExpiresIn)
 	return true
 }
